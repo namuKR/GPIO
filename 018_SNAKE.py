@@ -3,6 +3,23 @@ import pygame
 import spidev
 import os
 import time
+import RPi.GPIO as GPIO
+import sys
+
+GPIO.setmode(GPIO.BCM)
+
+pin_num = [16, 12, 13, 19, 26, 20, 21]
+pin_dp = 6
+GPIO.setwarnings(False)
+for num in pin_num:
+    GPIO.setup(num, GPIO.OUT)
+    GPIO.output(num, GPIO.LOW)
+GPIO.setup(pin_dp, GPIO.LOW)
+
+seg = [
+    [16, 12, 13, 19, 26, 20], [12, 13], [16, 12, 21, 26, 19], [16, 12, 13, 19, 21], [20, 21, 12, 13], [16, 20, 21,
+                                                                                                       13, 19], [16, 20, 26, 19, 13, 21], [20, 16, 12, 13], [16, 12, 13, 19, 26, 20, 21], [16, 12, 13, 19, 20, 21], [26, 12, 21, 13, 20]
+]
 
 swt_channel = 2  # SWITCH NU REU NEUN GEO JOYSTICK = 0
 vrx_channel = 1  # VRX IS CONNECTED TO 1
@@ -41,9 +58,28 @@ snake_speed = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
+pin_buzzer = 14
+GPIO.setup(pin_buzzer, GPIO.OUT)
 
+pwm = GPIO.PWM(pin_buzzer, 1)
 
+dead_sound_played = False
+old_score = 0
 def Your_score(score):
+    global old_score
+    if score > old_score:
+        GPIO.output(seg[8], 0)
+        if score >= 10:
+            GPIO.output(seg[10], 1)
+        else:
+            GPIO.output(seg[score], 1)
+        pwm.start(90)
+        pwm.ChangeFrequency(262)
+        time.sleep(.1)
+        pwm.ChangeFrequency(349)
+        time.sleep(.1)
+        pwm.stop()
+        old_score = score
     value = score_font.render("Your Score: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
 
@@ -75,19 +111,31 @@ def gameLoop():
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
     while not game_over:
-
+        global dead_sound_played
         while game_close == True:
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
             Your_score(Length_of_snake - 1)
             pygame.display.update()
-
+            if not dead_sound_played:
+                pwm.start(90)
+                pwm.ChangeFrequency(493)
+                time.sleep(.1)
+                pwm.ChangeFrequency(440)
+                time.sleep(.1)
+                pwm.ChangeFrequency(391)
+                time.sleep(.1)
+                pwm.ChangeFrequency(349)
+                time.sleep(.1)
+                pwm.stop()
+                dead_sound_played = True
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
                     if event.key == pygame.K_c:
+                        dead_sound_played = False
                         gameLoop()
 
         for event in pygame.event.get():

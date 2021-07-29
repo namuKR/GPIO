@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Staatliches&display=swap");
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      .navbar {
+        overflow: hidden;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        margin: auto;
+        opacity: 0.6;
+      }
+
+      .navbar a {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+
+      .navbar a:hover {
+      }
+
+      .navbar a.active {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .main {
+        padding: 16px;
+        margin-bottom: 30px;
+      }
+
+      .camera-movement {
+        float: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .lights-button {
+        float: right;
+      }
+
+      i.fa {
+        display: inline-block;
+        border-radius: 60px;
+        box-shadow: 0px 0px 2px #888;
+        padding: 0.5em 0.6em;
+      }
+
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 35%;
+      }
+
+      button {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+      }
+
+      .camera-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        /* Preserve aspet ratio */
+        min-width: 100%;
+        min-height: 100%;
+
+        /* Full height */
+        height: 100%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .top-right-logo {
+        font-size: 38px;
+        font-family: "Staatliches", sans-serif !important;
+        position: absolute;
+        left: 50%;
+        top: 3%;
+        transform: translateX(-50%);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .mode {
+        position: absolute;
+        width: 220px;
+        height: 100px;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        cursor: pointer;
+      }
+
+      .z4 {
+        z-index: 344;
+      }
+    </style>
+  </head>
+
+  <title>Smart Home Patrol System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+
+  <body>
+    <div class="main" id="newpost" style="display: none; z-index: 333">
+      <img
+        class="camera-bg"
+        style="height: 100%; background-attachment: fixed; z-index: 333"
+        id="bg"
+        class="center"
+        src="{{ url_for('video_feed') }}"
+      />
+      <!--<img  class="camera-bg" style="width: 100%; height:80%; background-attachment: fixed;" id="bg" class="center" src="https://www.psdbox.com/wp-content/uploads/2011/01/security-camera-photoshop-effect.jpg">-->
+    </div>
+
+    <div class="top-right-logo">
+      <a>Smart Home Patrol System</a>
+    </div>
+
+    <div class="mode">
+      <div
+        style="
+          width: 100px;
+          height: 100px;
+          border-radius: 7%;
+          margin-right: 10px;
+          border: 1px solid black;
+          text-align: center;
+          position: relative;
+        "
+        id="living"
+      >
+        <p
+          style="
+            position: absolute;
+            left: 50%;
+            top: 40%;
+
+            transform: translate(-50%, -50%);
+          "
+        >
+          Living Mode
+        </p>
+      </div>
+      <div
+        style="
+          width: 100px;
+          height: 100px;
+          border-radius: 7%;
+          margin-left: 10px;
+          border: 1px solid black;
+          text-align: center;
+          position: relative;
+        "
+        id="patrol"
+      >
+        <p
+          style="
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            transform: translate(-50%, -50%);
+          "
+        >
+          Patrol Mode
+        </p>
+      </div>
+    </div>
+
+    <div class="navbar z4">
+      <div class="ignoreCall z4">
+        <a id="decline" class="but_def z4">
+          <button id="button">
+            <i
+              style="background: red; color: white"
+              class="fa fa-video-camera fa-2x z4"
+              aria-hidden="true"
+              id="button_icon"
+            ></i>
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+      bg = document.getElementById("bg");
+      if (screenX > screenY) {
+        bg.setAttribute(
+          "style",
+          "height: 100%;background-attachment: fixed;z-index: 333;"
+        );
+      } else {
+        bg.setAttribute(
+          "style",
+          "width: 100%;background-attachment: fixed;z-index: 333;"
+        );
+      }
+
+      var button = document.getElementById("button");
+      button.onclick = function () {
+        var div = document.getElementById("newpost");
+        if (div.style.display !== "none") {
+          div.style.display = "none";
+          document
+            .getElementById("button_icon")
+            .setAttribute("class", "fa fa-video-camera fa-2x z4");
+        } else {
+          div.style.display = "block";
+          document
+            .getElementById("button_icon")
+            .setAttribute("class", "fa fa-times fa-2x z4");
+        }
+      };
+      living.onclick = function () {
+        location.href =
+          "http://" + location.hostname + ":" + location.port + "?mode=living";
+      };
+
+      patrol.onclick = function () {
+        location.href =
+          "http://" + location.hostname + ":" + location.port + "?mode=patrol";
+      };
+    </script>
+  </body>
+</html>
