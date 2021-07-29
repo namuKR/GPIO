@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <select id="sel">
+      <option id="r" value="r">RED</option>
+      <option id="b" value="b">BLUE</option>
+      <option id="y" value="y">YELLOW</option>
+    </select>
+    <button id="on">ON</button> <button id="off">OFF</button>
+    <script>
+      document.getElementById("on").onclick = function () {
+        sel = document.getElementById("sel");
+        if (sel.value == "r") {
+          location.href += "/red/on";
+        }
+        if (sel.value == "b") {
+          location.href += "/blue/on";
+        }
+        if (sel.value == "y") {
+          location.href += "/yellow/on";
+        }
+      };
+      document.getElementById("off").onclick = function () {
+        sel = document.getElementById("sel");
+        if (sel.value == "r") {
+          location.href += "/red/off";
+        }
+        if (sel.value == "b") {
+          location.href += "/blue/off";
+        }
+        if (sel.value == "y") {
+          location.href += "/yellow/off";
+        }
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    LED RED: <a href={{ url_for('led_button', color="red", on_off="on") }}>
+        <input type="button" value="ON"></a>
+        <a href={{ url_for('led_button', color="red", on_off="off") }}>
+            <input type="button" value="OFF">
+    </a><br>
+    LED BLUE: <a href={{ url_for('led_button', color="blue", on_off="on") }}>
+        <input type="button" value="ON"></a>
+        <a href={{ url_for('led_button', color="blue", on_off="off") }}>
+            <input type="button" value="OFF">
+    </a><br>
+    LED YELLOW: <a href={{ url_for('led_button', color="yellow", on_off="on") }}>
+        <input type="button" value="ON"></a>
+        <a href={{ url_for('led_button', color="yellow", on_off="off") }}>
+            <input type="button" value="OFF">
+    </a><br>
+    <h1>Door Control</h1>
+    <a href={{ url_for('door_control', open_close="open") }}>
+        <input type="button" value="OPEN"></a>
+    <a href={{ url_for('door_control', open_close="close") }}>
+            <input type="button" value="CLOSE">
+    </a><br>
+    <h1>Light Control</h1>
+    <form action="/rgb_led" method="GET">
+        <h2 style="color: red">Red: </h2>
+        <input type="range" name="red_range" min="0" max="100" step="10">
+        <h2 style="color: green">Green: </h2>
+        <input type="range" name="green_range" min="0" max="100" step="10">
+        <h2 style="color:blue">Blue: </h2>
+        <input type="range" name="blue_range" min="0" max="100" step="10">
+
+        <input type="submit" value="Light">
+    </form>
+</body>
+</html>
